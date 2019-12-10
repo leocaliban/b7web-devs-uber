@@ -2,7 +2,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import Preload from '../pages/Preload';
-import Login from '../pages/Login';
+import Login from '../pages/Login/Login';
 //import HomeStack from './HomeStack';
 
 export default createAppContainer(createStackNavigator({
