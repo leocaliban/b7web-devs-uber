@@ -4,12 +4,17 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 const Preload = (props) => {
     if (!props.token) {
-        navigate(props, 'Login');
+        props.navigation.dispatch(StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({ routeName: 'Login' })
+            ]
+        }));
     } else {
         props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'Home' })
+                NavigationActions.navigate({ routeName: 'HomeStack' })
             ]
         }));
     }

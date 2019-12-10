@@ -3,6 +3,10 @@ import React, { useState } from 'react';
 import { StatusBar, Platform } from 'react-native';
 import useDevsUberApi from '../../useDevsUberApi';
 
+import { connect } from 'react-redux';
+
+import { StackActions, NavigationActions } from 'react-navigation';
+
 import {
   Container,
   Header,
@@ -15,7 +19,7 @@ import {
   SubmitButtonTitle
 } from './LoginStyle';
 
-const Page = () => {
+const Page = (props) => {
   const api = useDevsUberApi();
 
   const [activeMenu, setActiveMenu] = useState('signin');
@@ -23,6 +27,42 @@ const Page = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handleSignIn = async () => {
+    if (email && password) {
+      const response = await api.signin(email, password);
+
+      if (response.error) {
+        alert(response.error);
+      } else {
+        props.setToken(response.token);
+        props.navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'HomeStack' })
+          ]
+        }));
+      }
+    }
+  };
+
+  async function handleSignUp() {
+    if (name && email && password) {
+      const response = await api.signup(name, email, password);
+
+      if (response.error) {
+        alert(response.error);
+      } else {
+        props.setToken(response.token);
+        props.navigation.dispatch(StackActions.reset({
+          index: 0,
+          actions: [
+            NavigationActions.navigate({ routeName: 'HomeStack' })
+          ]
+        }));
+      }
+    }
+  }
 
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : null}>
@@ -77,17 +117,17 @@ const Page = () => {
         onChangeText={setPassword}
         placeholder="Senha"
         placeholderTextColor="#999999"
-        keyboardType="visible-password"
+        secureTextEntry={true}
       ></Input>
 
       {activeMenu === 'signin' &&
-        <SubmitButton>
+        <SubmitButton onPress={handleSignIn}>
           <SubmitButtonTitle>Login</SubmitButtonTitle>
         </SubmitButton>
       }
 
       {activeMenu === 'signup' &&
-        <SubmitButton>
+        <SubmitButton onPress={handleSignUp}>
           <SubmitButtonTitle>Cadastrar</SubmitButtonTitle>
         </SubmitButton>
       }
@@ -96,4 +136,16 @@ const Page = () => {
   )
 }
 
-export default Page;
+const mapStateToProps = (state) => {
+  return {
+    token: state.UserReducer.token
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setToken: (token) => dispatch({ type: 'SET_TOKEN', payload: { token } })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Page);
