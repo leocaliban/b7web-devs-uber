@@ -18,6 +18,10 @@ const Page = () => {
 
   const [activeMenu, setActiveMenu] = useState('signin');
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <Container behavior={Platform.OS === 'ios' ? 'padding' : null}>
       <StatusBar
@@ -48,10 +52,30 @@ const Page = () => {
       </Menu>
 
       {activeMenu === 'signup' &&
-        <Input placeholder="Nome"></Input>
+        <Input
+          value={name}
+          onChangeText={setName}
+          placeholder="Nome"
+          placeholderTextColor="#999999"
+          autoCapitalize="words"
+        ></Input>
       }
-      <Input placeholder="E-mail"></Input>
-      <Input placeholder="Senha"></Input>
+      <Input
+        value={email}
+        onChangeText={setEmail}
+        placeholder="E-mail"
+        placeholderTextColor="#999999"
+        keyboardType="email-address"
+        autoCapitalize="none"
+      ></Input>
+
+      <Input
+        value={password}
+        onChangeText={setPassword}
+        placeholder="Senha"
+        placeholderTextColor="#999999"
+        keyboardType=""
+      ></Input>
 
       {activeMenu === 'signin' &&
         <SubmitButton>
