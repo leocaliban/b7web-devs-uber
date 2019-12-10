@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { StatusBar, Platform } from 'react-native';
+import useDevsUberApi from '../../useDevsUberApi';
 
 import {
   Container,
@@ -15,6 +16,7 @@ import {
 } from './LoginStyle';
 
 const Page = () => {
+  const api = useDevsUberApi();
 
   const [activeMenu, setActiveMenu] = useState('signin');
 
@@ -57,6 +59,7 @@ const Page = () => {
           onChangeText={setName}
           placeholder="Nome"
           placeholderTextColor="#999999"
+          keyboardType="name-phone-pad"
           autoCapitalize="words"
         ></Input>
       }
@@ -74,7 +77,7 @@ const Page = () => {
         onChangeText={setPassword}
         placeholder="Senha"
         placeholderTextColor="#999999"
-        keyboardType=""
+        keyboardType="visible-password"
       ></Input>
 
       {activeMenu === 'signin' &&
