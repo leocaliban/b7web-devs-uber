@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
-import { StatusBar, Platform } from 'react-native';
+import {
+  StatusBar,
+  Platform,
+  ActivityIndicator
+} from 'react-native';
 import useDevsUberApi from '../../useDevsUberApi';
 
 import { connect } from 'react-redux';
@@ -16,7 +20,8 @@ import {
   MenuItemTitle,
   Input,
   SubmitButton,
-  SubmitButtonTitle
+  SubmitButtonTitle,
+  Spinner
 } from './LoginStyle';
 
 const Page = (props) => {
@@ -28,10 +33,13 @@ const Page = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [spinner, setSpinner] = useState(false);
+
   const handleSignIn = async () => {
     if (email && password) {
+      setSpinner(true);
       const response = await api.signin(email, password);
-
+      setSpinner(false);
       if (response.error) {
         alert(response.error);
       } else {
@@ -48,8 +56,9 @@ const Page = (props) => {
 
   async function handleSignUp() {
     if (name && email && password) {
+      setSpinner(true);
       const response = await api.signup(name, email, password);
-
+      setSpinner(false);
       if (response.error) {
         alert(response.error);
       } else {
@@ -101,6 +110,7 @@ const Page = (props) => {
           placeholderTextColor="#999999"
           keyboardType="name-phone-pad"
           autoCapitalize="words"
+          editable={!spinner}
         ></Input>
       }
       <Input
@@ -110,6 +120,7 @@ const Page = (props) => {
         placeholderTextColor="#999999"
         keyboardType="email-address"
         autoCapitalize="none"
+        editable={!spinner}
       ></Input>
 
       <Input
@@ -118,20 +129,32 @@ const Page = (props) => {
         placeholder="Senha"
         placeholderTextColor="#999999"
         secureTextEntry={true}
+        editable={!spinner}
       ></Input>
 
       {activeMenu === 'signin' &&
-        <SubmitButton onPress={handleSignIn}>
+        <SubmitButton
+          onPress={handleSignIn}
+          disabled={spinner}
+        >
           <SubmitButtonTitle>Login</SubmitButtonTitle>
         </SubmitButton>
       }
 
       {activeMenu === 'signup' &&
-        <SubmitButton onPress={handleSignUp}>
+        <SubmitButton
+          onPress={handleSignUp}
+          disabled={spinner}
+        >
           <SubmitButtonTitle>Cadastrar</SubmitButtonTitle>
         </SubmitButton>
       }
 
+      {spinner &&
+        <Spinner>
+          <ActivityIndicator size="large" color="#ffffff"></ActivityIndicator>
+        </Spinner>
+      }
     </Container>
   )
 }

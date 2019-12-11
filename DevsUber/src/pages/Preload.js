@@ -14,21 +14,12 @@ const Preload = (props) => {
         props.navigation.dispatch(StackActions.reset({
             index: 0,
             actions: [
-                NavigationActions.navigate({ routeName: 'HomeStack' })
+                NavigationActions.navigate({ routeName: 'Login' })
             ]
         }));
     }
     return null;
 };
-
-function navigate(props, page) {
-    props.navigation.dispatch(StackActions.reset({
-        index: 0,
-        actions: [
-            NavigationActions.navigate({ routeName: page })
-        ]
-    }));
-}
 
 const mapStateToProps = (state) => {
     return {
