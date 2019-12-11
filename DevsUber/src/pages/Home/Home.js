@@ -4,7 +4,15 @@ import {
     StatusBar,
 } from 'react-native';
 
-import { Container } from './HomeStyle';
+import { 
+    Container,
+    IntineraryArea,
+    IntineraryItem,
+    IntineraryLabel,
+    IntineraryPoint,
+    IntineraryTitle,
+    IntineraryValue
+} from './HomeStyle';
 
 import MapView from 'react-native-maps';
 
@@ -69,6 +77,28 @@ const Page = () => {
                 provider="google"
                 camera={mapLocal}
             ></MapView>
+
+            <IntineraryArea>
+                <IntineraryItem>
+                    <>
+                        <IntineraryLabel>
+                            <IntineraryPoint></IntineraryPoint>
+                            <IntineraryTitle>Origem</IntineraryTitle>
+                        </IntineraryLabel>
+                        <IntineraryValue>...</IntineraryValue>
+                    </>
+                </IntineraryItem>
+
+                <IntineraryItem>
+                    <>
+                        <IntineraryLabel>
+                            <IntineraryPoint></IntineraryPoint>
+                            <IntineraryTitle>Destino</IntineraryTitle>
+                        </IntineraryLabel>
+                        <IntineraryValue>...</IntineraryValue>
+                    </>
+                </IntineraryItem>
+            </IntineraryArea>
         </Container>
     );
 }
