@@ -3,12 +3,12 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Preload from '../pages/Preload';
 import Login from '../pages/Login/Login';
-//import HomeStack from './HomeStack';
+import HomeDrawer from './HomeDrawer';
 
 export default createAppContainer(createStackNavigator({
     Preload,
     Login,
-    //HomeStack
+    HomeDrawer
 }, {
     initialRouteName: 'Preload',
     defaultNavigationOptions: {
