@@ -38,11 +38,18 @@ const Page = () => {
 
     const [fromLocation, setFromLocation] = useState({});
     const [toLocation, setToLocation] = useState({});
+    const [showDirections, setShowDirections] = useState(false);
 
     useEffect(() => {
         Geocoder.init(MAPS_API, { language: 'pt-br' });
         getMyCurrentPosition();
     }, []);
+
+    useEffect(() => {
+        if (fromLocation.center && toLocation.center) {
+            setShowDirections(true);
+        }
+    }, [toLocation]);
 
     const getMyCurrentPosition = () => {
         Geolocation.getCurrentPosition(async (info) => {
@@ -69,6 +76,29 @@ const Page = () => {
         });
     };
 
+    const handleFromClick = () => {
+
+    };
+
+    const handleToClick = async () => {
+
+        const geo = await Geocoder.from('Av. Pref. Severino Bezerra Cabral, 1339');
+        if (geo.results.length > 0) {
+            const location = {
+                name: geo.results[0].formatted_address,
+                center: {
+                    latitude: geo.results[0].geometry.location.lat,
+                    longitude: geo.results[0].geometry.location.lng
+                },
+                zoom: 19,
+                pitch: 0,
+                altitude: 0,
+                heading: 0
+            };
+            setToLocation(location);
+        }
+    };
+
     return (
         <Container>
             <StatusBar barStyle="dark-content"></StatusBar>
@@ -77,10 +107,32 @@ const Page = () => {
                 style={{ flex: 1 }}
                 provider="google"
                 camera={mapLocal}
-            ></MapView>
+            >
+                {fromLocation.center &&
+                    <MapView.Marker
+                        pinColor="black"
+                        coordinate={fromLocation.center}
+                    ></MapView.Marker>
+                }
+
+                {toLocation.center &&
+                    <MapView.Marker
+                        pinColor="black"
+                        coordinate={toLocation.center}
+                    ></MapView.Marker>
+                }
+
+                {showDirections &&
+                    <></>
+                }
+
+            </MapView>
 
             <IntineraryArea>
-                <IntineraryItem>
+                <IntineraryItem
+                    onPress={handleFromClick}
+                    underlayColor="#EEE"
+                >
                     <>
                         <IntineraryLabel>
                             <IntineraryPoint color="#0000ff"></IntineraryPoint>
@@ -97,14 +149,17 @@ const Page = () => {
                     </>
                 </IntineraryItem>
 
-                <IntineraryItem>
+                <IntineraryItem
+                    onPress={handleToClick}
+                    underlayColor="#EEE"
+                >
                     <>
                         <IntineraryLabel>
                             <IntineraryPoint color="#00FF00"></IntineraryPoint>
                             <IntineraryTitle>Destino</IntineraryTitle>
                         </IntineraryLabel>
                         {toLocation.name &&
-                            <IntineraryValue>...</IntineraryValue>
+                            <IntineraryValue>{toLocation.name}</IntineraryValue>
                         }
                         {!toLocation.name &&
                             <IntineraryPlaceholder>Escolha um local de destino</IntineraryPlaceholder>
