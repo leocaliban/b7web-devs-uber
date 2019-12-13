@@ -22,13 +22,15 @@ import Geocoder from 'react-native-geocoding';
 
 import { MAPS_API } from '../../configs/config';
 
+import MapViewDirections from 'react-native-maps-directions';
+
 const Page = () => {
     const map = useRef();
 
     const [mapLocal, setMapLocal] = useState({
         center: {
-            latitude: -7.23537,
-            longitude: -35.8756552
+            latitude: -7.2348973,
+            longitude: -35.8771093
         },
         zoom: 18,
         pitch: 0,
@@ -62,7 +64,7 @@ const Page = () => {
                         latitude: info.coords.latitude,
                         longitude: info.coords.longitude
                     },
-                    zoom: 19,
+                    zoom: 18,
                     pitch: 0,
                     altitude: 0,
                     heading: 0
@@ -82,7 +84,7 @@ const Page = () => {
 
     const handleToClick = async () => {
 
-        const geo = await Geocoder.from('Av. Pref. Severino Bezerra Cabral, 1339');
+        const geo = await Geocoder.from('Av. Pref. Severino Bezerra Cabral, 1039');
         if (geo.results.length > 0) {
             const location = {
                 name: geo.results[0].formatted_address,
@@ -90,13 +92,24 @@ const Page = () => {
                     latitude: geo.results[0].geometry.location.lat,
                     longitude: geo.results[0].geometry.location.lng
                 },
-                zoom: 19,
+                zoom: 18,
                 pitch: 0,
                 altitude: 0,
                 heading: 0
             };
             setToLocation(location);
         }
+    };
+
+    const handleDirectionsReady = (response) => {
+        map.current.fitToCoordinates(response.coordinates, {
+            edgePadding: {
+                top: 400,
+                right: 50,
+                bottom: 100,
+                left: 50,
+            }
+        });
     };
 
     return (
@@ -123,7 +136,14 @@ const Page = () => {
                 }
 
                 {showDirections &&
-                    <></>
+                    <MapViewDirections
+                        origin={fromLocation.center}
+                        destination={toLocation.center}
+                        apikey={MAPS_API}
+                        strokeWidth={3}
+                        strokeColor="hotpink"
+                        onReady={handleDirectionsReady}
+                    ></MapViewDirections>
                 }
 
             </MapView>
