@@ -4,14 +4,15 @@ import {
     StatusBar,
 } from 'react-native';
 
-import { 
+import {
     Container,
     IntineraryArea,
     IntineraryItem,
     IntineraryLabel,
     IntineraryPoint,
     IntineraryTitle,
-    IntineraryValue
+    IntineraryValue,
+    IntineraryPlaceholder
 } from './HomeStyle';
 
 import MapView from 'react-native-maps';
@@ -29,7 +30,7 @@ const Page = () => {
             latitude: -7.23537,
             longitude: -35.8756552
         },
-        zoom: 19,
+        zoom: 18,
         pitch: 0,
         altitude: 0,
         heading: 0
@@ -47,7 +48,7 @@ const Page = () => {
         Geolocation.getCurrentPosition(async (info) => {
 
             const geo = await Geocoder.from(info.coords.latitude, info.coords.longitude);
-            if (geo.results.lenght > 0) {
+            if (geo.results.length > 0) {
                 const location = {
                     name: geo.results[0].formatted_address,
                     center: {
@@ -82,20 +83,32 @@ const Page = () => {
                 <IntineraryItem>
                     <>
                         <IntineraryLabel>
-                            <IntineraryPoint></IntineraryPoint>
+                            <IntineraryPoint color="#0000ff"></IntineraryPoint>
                             <IntineraryTitle>Origem</IntineraryTitle>
                         </IntineraryLabel>
-                        <IntineraryValue>...</IntineraryValue>
+                        {fromLocation.name &&
+                            <IntineraryValue>{fromLocation.name}</IntineraryValue>
+                        }
+                        {!fromLocation.name &&
+                            <IntineraryPlaceholder>Escolha um local de origem</IntineraryPlaceholder>
+                        }
+
+
                     </>
                 </IntineraryItem>
 
                 <IntineraryItem>
                     <>
                         <IntineraryLabel>
-                            <IntineraryPoint></IntineraryPoint>
+                            <IntineraryPoint color="#00FF00"></IntineraryPoint>
                             <IntineraryTitle>Destino</IntineraryTitle>
                         </IntineraryLabel>
-                        <IntineraryValue>...</IntineraryValue>
+                        {toLocation.name &&
+                            <IntineraryValue>...</IntineraryValue>
+                        }
+                        {!toLocation.name &&
+                            <IntineraryPlaceholder>Escolha um local de destino</IntineraryPlaceholder>
+                        }
                     </>
                 </IntineraryItem>
             </IntineraryArea>
